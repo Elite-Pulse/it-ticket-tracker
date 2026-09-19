@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_it_ticket_root"
+              name="IT Tickets"
+              sequence="60"/>
+
+    <menuitem id="menu_it_ticket_main"
+              name="Tickets"
+              parent="menu_it_ticket_root"
+              action="action_it_ticket"
+              sequence="10"/>
+
+    <!-- ================= REPORTING (PDF/Excel: everyone - each user's own weekly
+         report, per the standard process. Analysis: All & Admin only - cross-team data) === -->
+    <menuitem id="menu_it_ticket_reporting"
+              name="Reporting"
+              parent="menu_it_ticket_root"
+              sequence="20"/>
+
+    <menuitem id="menu_it_ticket_reporting_pdf"
+              name="PDF Report"
+              parent="menu_it_ticket_reporting"
+              action="action_it_ticket_report_pdf"
+              sequence="10"/>
+
+    <menuitem id="menu_it_ticket_reporting_excel"
+              name="Excel Report"
+              parent="menu_it_ticket_reporting"
+              action="action_it_ticket_report_excel"
+              sequence="20"/>
+
+    <menuitem id="menu_it_ticket_reporting_analysis"
+              name="Ticket Analysis"
+              parent="menu_it_ticket_reporting"
+              action="action_it_ticket_reporting"
+              groups="it_ticket_tracker.group_ticket_all,it_ticket_tracker.group_ticket_admin"
+              sequence="30"/>
+
+    <!-- ================= CONFIGURATION (Admin only) ================= -->
+    <menuitem id="menu_it_ticket_config"
+              name="Configuration"
+              parent="menu_it_ticket_root"
+              groups="it_ticket_tracker.group_ticket_admin"
+              sequence="30"/>
+
+    <menuitem id="menu_it_ticket_config_stage"
+              name="Stages"
+              parent="menu_it_ticket_config"
+              action="action_it_ticket_stage"
+              sequence="10"/>
+
+    <menuitem id="menu_it_ticket_config_type"
+              name="Types"
+              parent="menu_it_ticket_config"
+              action="action_it_ticket_type"
+              sequence="20"/>
+
+    <menuitem id="menu_it_ticket_config_category"
+              name="Categories"
+              parent="menu_it_ticket_config"
+              action="action_it_ticket_category"
+              sequence="30"/>
+
+    <menuitem id="menu_it_ticket_config_priority"
+              name="Priorities"
+              parent="menu_it_ticket_config"
+              action="action_it_ticket_priority"
+              sequence="40"/>
+
+    <menuitem id="menu_it_ticket_config_reporter"
+              name="Reporters / Requesters"
+              parent="menu_it_ticket_config"
+              action="action_it_ticket_reporter"
+              sequence="50"/>
+
+    <menuitem id="menu_it_ticket_config_settings"
+              name="Settings"
+              parent="menu_it_ticket_config"
+              action="action_it_ticket_config_settings"
+              sequence="60"/>
+
+    <menuitem id="menu_it_ticket_config_mail_schedule"
+              name="Auto Mailing"
+              parent="menu_it_ticket_config"
+              action="action_it_ticket_mail_schedule"
+              sequence="70"/>
+
+    <menuitem id="menu_it_ticket_config_mail_log"
+              name="Mailing History"
+              parent="menu_it_ticket_config"
+              action="action_it_ticket_mail_log"
+              sequence="80"/>
+
+</odoo>

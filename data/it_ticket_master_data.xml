@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ================= STAGES (replaces Status) ================= -->
+        <!-- colors: Open=grey, In Progress=blue, Pending=orange, Resolved/Closed=green -->
+        <record id="it_ticket_stage_open" model="it.ticket.stage">
+            <field name="name">Open</field>
+            <field name="sequence">10</field>
+            <field name="color">0</field>
+            <field name="is_closed" eval="False"/>
+        </record>
+        <record id="it_ticket_stage_in_progress" model="it.ticket.stage">
+            <field name="name">In Progress</field>
+            <field name="sequence">20</field>
+            <field name="color">4</field>
+            <field name="is_closed" eval="False"/>
+        </record>
+        <record id="it_ticket_stage_pending" model="it.ticket.stage">
+            <field name="name">Pending</field>
+            <field name="sequence">30</field>
+            <field name="color">2</field>
+            <field name="is_closed" eval="False"/>
+        </record>
+        <record id="it_ticket_stage_resolved" model="it.ticket.stage">
+            <field name="name">Resolved</field>
+            <field name="sequence">40</field>
+            <field name="color">10</field>
+            <field name="is_closed" eval="True"/>
+        </record>
+        <record id="it_ticket_stage_closed" model="it.ticket.stage">
+            <field name="name">Closed</field>
+            <field name="sequence">50</field>
+            <field name="color">10</field>
+            <field name="fold" eval="True"/>
+            <field name="is_closed" eval="True"/>
+        </record>
+
+        <!-- ================= TYPES (colors: Incident=urgent red, Demande=calm blue) === -->
+        <record id="it_ticket_type_incident" model="it.ticket.type">
+            <field name="name">Incident</field>
+            <field name="sequence">10</field>
+            <field name="color">1</field>
+        </record>
+        <record id="it_ticket_type_demande" model="it.ticket.type">
+            <field name="name">Demande</field>
+            <field name="sequence">20</field>
+            <field name="color">7</field>
+        </record>
+
+        <!-- ================= CATEGORIES (spread across the palette) ================= -->
+        <record id="it_ticket_category_network" model="it.ticket.category">
+            <field name="name">Network</field>
+            <field name="sequence">10</field>
+            <field name="color">4</field>
+        </record>
+        <record id="it_ticket_category_server" model="it.ticket.category">
+            <field name="name">Server</field>
+            <field name="sequence">20</field>
+            <field name="color">5</field>
+        </record>
+        <record id="it_ticket_category_storage" model="it.ticket.category">
+            <field name="name">Storage</field>
+            <field name="sequence">30</field>
+            <field name="color">6</field>
+        </record>
+        <record id="it_ticket_category_access" model="it.ticket.category">
+            <field name="name">Access</field>
+            <field name="sequence">40</field>
+            <field name="color">8</field>
+        </record>
+        <record id="it_ticket_category_application" model="it.ticket.category">
+            <field name="name">Application</field>
+            <field name="sequence">50</field>
+            <field name="color">9</field>
+        </record>
+
+        <!-- ================= PRIORITIES (colors = standard Odoo palette) === -->
+        <!-- 1=red, 2=orange, 3=yellow, 10=green -->
+        <record id="it_ticket_priority_critical" model="it.ticket.priority">
+            <field name="name">Critical</field>
+            <field name="sequence">10</field>
+            <field name="color">1</field>
+        </record>
+        <record id="it_ticket_priority_high" model="it.ticket.priority">
+            <field name="name">High</field>
+            <field name="sequence">20</field>
+            <field name="color">2</field>
+        </record>
+        <record id="it_ticket_priority_medium" model="it.ticket.priority">
+            <field name="name">Medium</field>
+            <field name="sequence">30</field>
+            <field name="color">3</field>
+        </record>
+        <record id="it_ticket_priority_low" model="it.ticket.priority">
+            <field name="name">Low</field>
+            <field name="sequence">40</field>
+            <field name="color">10</field>
+        </record>
+
+        <!-- ================= SETTINGS SINGLETON ================= -->
+        <record id="it_ticket_settings_singleton" model="it.ticket.settings">
+            <field name="auto_generate_id" eval="False"/>
+            <field name="id_prefix">TCK-</field>
+        </record>
+
+    </data>
+</odoo>

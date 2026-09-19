@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- ================= MODULE CATEGORY ================= -->
+        <record id="module_category_it_ticket" model="ir.module.category">
+            <field name="name">IT Ticket Tracker</field>
+        </record>
+
+        <!-- ================= GROUPS ================= -->
+        <!-- Level 1: sees & edits only tickets assigned to him -->
+        <record id="group_ticket_own" model="res.groups">
+            <field name="name">User: Own Tickets Only</field>
+            <field name="category_id" ref="module_category_it_ticket"/>
+        </record>
+
+        <!-- Level 2: sees AND edits ALL tickets (not just their own) - a
+             team-lead tier. Still cannot delete: only Admin deletes, which
+             preserves the audit trail Hamza's process depends on. -->
+        <record id="group_ticket_all" model="res.groups">
+            <field name="name">User: All Tickets (see &amp; edit everyone's)</field>
+            <field name="category_id" ref="module_category_it_ticket"/>
+            <field name="implied_ids" eval="[(4, ref('group_ticket_own'))]"/>
+        </record>
+
+        <!-- Level 3: full access, including delete and configuration -->
+        <record id="group_ticket_admin" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="category_id" ref="module_category_it_ticket"/>
+            <field name="implied_ids" eval="[(4, ref('group_ticket_all'))]"/>
+        </record>
+
+        <!-- ================= RECORD RULES ================= -->
+
+        <!-- Own-tickets group (and everyone above it, since they imply this group):
+             full CRUD but ONLY on tickets where I am Assigned To. No delete. -->
+        <record id="rule_ticket_own" model="ir.rule">
+            <field name="name">IT Ticket: own tickets only (read/write/create)</field>
+            <field name="model_id" ref="model_it_ticket"/>
+            <field name="domain_force">[('assigned_to', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_ticket_own'))]"/>
+            <field name="perm_read">True</field>
+            <field name="perm_write">True</field>
+            <field name="perm_create">True</field>
+            <field name="perm_unlink">False</field>
+        </record>
+
+        <!-- All-tickets group: full read/write/create on EVERY ticket, not
+             just their own (this group also carries rule_ticket_own since
+             group_ticket_all implies group_ticket_own, but that rule's
+             narrower domain is simply superseded here via OR). Still no
+             delete - see rule_ticket_admin_full below. -->
+        <record id="rule_ticket_all_full" model="ir.rule">
+            <field name="name">IT Ticket: all tickets - see and edit everyone's</field>
+            <field name="model_id" ref="model_it_ticket"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_ticket_all'))]"/>
+            <field name="perm_read">True</field>
+            <field name="perm_write">True</field>
+            <field name="perm_create">True</field>
+            <field name="perm_unlink">False</field>
+        </record>
+
+        <!-- Admin group: unrestricted on every operation, incl. delete. -->
+        <record id="rule_ticket_admin_full" model="ir.rule">
+            <field name="name">IT Ticket: administrator full access</field>
+            <field name="model_id" ref="model_it_ticket"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_ticket_admin'))]"/>
+            <field name="perm_read">True</field>
+            <field name="perm_write">True</field>
+            <field name="perm_create">True</field>
+            <field name="perm_unlink">True</field>
+        </record>
+
+    </data>
+</odoo>

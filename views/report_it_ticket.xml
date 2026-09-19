@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Landscape paper format so the 12-column table fits comfortably.
+         Margins match Odoo's own default proportions so the letterhead,
+         watermark and footer render at their normal size and never overlap
+         the report content. -->
+    <record id="paperformat_it_ticket_landscape" model="report.paperformat">
+        <field name="name">IT Ticket Report - Landscape</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">35</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">30</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- QWeb template -->
+    <template id="report_it_ticket_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="text-center" style="margin-top: 8mm; margin-bottom: 10mm;">
+                        <h1 style="color:#4c4c9d; margin-bottom: 4px;">IT Ticket Report</h1>
+                        <p class="text-muted mb-0"
+                           t-esc="'Generated on %s - %s ticket(s)' % (context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M'), len(docs))"/>
+                    </div>
+
+                    <table class="table table-sm table-bordered" style="font-size:9px;">
+                        <thead style="background-color:#4472C4;color:white;">
+                            <tr>
+                                <th>Ticket ID</th>
+                                <th>Type</th>
+                                <th>Category</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Assigned To</th>
+                                <th>Reported By</th>
+                                <th>Date Opened</th>
+                                <th>Date Closed</th>
+                                <th>Resolution (h)</th>
+                                <th>Week #</th>
+                                <th>Comments</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="docs" t-as="o">
+                                <td><span t-field="o.name"/></td>
+                                <td><span t-field="o.ticket_type_id.name"/></td>
+                                <td><span t-esc="', '.join(o.category_ids.mapped('name'))"/></td>
+                                <td><span t-field="o.priority_id.name"/></td>
+                                <td><span t-field="o.stage_id.name"/></td>
+                                <td><span t-field="o.assigned_to.name"/></td>
+                                <td><span t-field="o.reported_by_id.name"/></td>
+                                <td><span t-field="o.date_opened"/></td>
+                                <td><span t-field="o.date_closed"/></td>
+                                <td class="text-end"><span t-field="o.resolution_time"/></td>
+                                <td class="text-center"><span t-field="o.week_number"/></td>
+                                <td><span t-field="o.comments"/></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr style="background-color:#D9E1F2;">
+                                <td colspan="9" class="text-end"><strong>TOTAL</strong></td>
+                                <td class="text-end">
+                                    <strong t-esc="'%.2f' % sum(o.resolution_time for o in docs)"/>
+                                </td>
+                                <td/>
+                                <td/>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Report action - called from the Reporting > PDF Report wizard, no
+         longer bound to the ticket form's Print menu (that was confusing:
+         it printed the ticket's report action, not the single ticket). -->
+    <record id="action_report_it_ticket" model="ir.actions.report">
+        <field name="name">IT Ticket Report (PDF)</field>
+        <field name="model">it.ticket</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">it_ticket_tracker.report_it_ticket_document</field>
+        <field name="report_file">it_ticket_tracker.report_it_ticket_document</field>
+        <field name="print_report_name">'IT_Ticket_Report_%s' % (time.strftime('%Y-%m-%d'))</field>
+        <field name="paperformat_id" ref="paperformat_it_ticket_landscape"/>
+    </record>
+
+</odoo>

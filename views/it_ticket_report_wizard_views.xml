@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_it_ticket_report_wizard_form" model="ir.ui.view">
+        <field name="name">it.ticket.report.wizard.form</field>
+        <field name="model">it.ticket.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="IT Ticket Report">
+                <field name="report_mode" invisible="1"/>
+                <field name="can_filter_others" invisible="1"/>
+                <group>
+                    <group string="Period">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group string="Filters">
+                        <field name="assigned_to_ids" widget="many2many_tags" invisible="not can_filter_others"/>
+                        <field name="stage_ids" widget="many2many_tags"/>
+                    </group>
+                </group>
+                <p class="text-muted" invisible="not can_filter_others">Leave every filter empty to include every ticket you have access to, across all statuses.</p>
+                <p class="text-muted" invisible="can_filter_others">This includes your own tickets only. Leave Stage empty to include every status.</p>
+                <footer>
+                    <button name="action_generate_pdf" type="object" string="Generate PDF"
+                            class="btn-primary" icon="fa-file-pdf-o" invisible="report_mode == 'excel'"/>
+                    <button name="action_generate_excel" type="object" string="Generate Excel"
+                            class="btn-primary" icon="fa-file-excel-o" invisible="report_mode == 'pdf'"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_it_ticket_report_pdf" model="ir.actions.act_window">
+        <field name="name">PDF Report</field>
+        <field name="res_model">it.ticket.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_report_mode': 'pdf'}</field>
+    </record>
+
+    <record id="action_it_ticket_report_excel" model="ir.actions.act_window">
+        <field name="name">Excel Report</field>
+        <field name="res_model">it.ticket.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_report_mode': 'excel'}</field>
+    </record>
+
+</odoo>
